@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>TRANSACTION REPORT</h1>
+    
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Customer</th>
+            <th>Email</th>
+        </tr>
+        {% for row in data %}
+        <tr>
+            <td>{{row[5]}}</td>
+            <td>{{row[4]}}</td>
+            <td>{{row[6]|format_price}}</td>
+            <td>{{row[2]}}</td>
+            <td>{{row[1]}}</td>
+        </tr>
+        {% endfor %}
+        <!-- Tambahkan baris data sesuai kebutuhan -->
+    </table>
+</body>
+</html>

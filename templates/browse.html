@@ -1,0 +1,61 @@
+{% extends 'layout.html'%}
+{% block content %}
+<!-- Message -->
+  <section class="content-header">
+    {% for message in get_flashed_messages()%}
+        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+          <strong>{{ message }}</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor%}
+  </section>
+<!-- Message -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="page-content">
+          <div class="heading-section d-flex justify-content-between align-items-center mt-2">
+            <h4 style="margin-top: 0; margin-bottom: 0;">VCD Library</h4>
+            {% if session.email == 'admin@gmail.com' %}
+            <div class="main-border-button text-right">
+              <a href="/dataentry">Add Data</a>
+            </div>
+            {% endif %}
+          </div>          
+          {% if data|length == 0 %}
+          <div class="gaming-library header-text" style="height:400px; margin-top: 32px; display: flex; align-items: center; justify-content: center;">
+            <div class="row">
+              <div class="col-lg-12">
+                  <h6 style="height: max-content; display: block; color: white;">No Data to Display</h6>
+              </div>
+            </div>
+          </div>
+          {% else %}
+          <div class="most-popular header-text" style="min-height:400px; margin-top: 32px;">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="row">
+                  {% for row in data %}
+                  <div class="col-lg-4 col-sm-6">
+                    <a href='/detailvcd/{{row[0]}}'>
+                      <div class="item">
+                        <img id ="card-images" src="../static/files/{{row[2]}}" alt="">
+                        <h4>{{row[1][:10] + '...' if row[1]|length > 20 else row[1]}}<br><span>{{row[4]|capitalize}}</span></h4>
+                        <ul>
+                          <li><i class="fa fa-dollar"></i> {{row[3]|format_price2}}</li>
+                          <li><i class="fa fa-box-open"></i> {{row[5]}}</li>
+                        </ul>
+                      </div>
+                    </a>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

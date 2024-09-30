@@ -1,0 +1,92 @@
+{% extends 'layout.html'%}
+{% block content %}
+  <section class="content-header">
+    {% for message in get_flashed_messages()%}
+        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+          <strong>{{ message }}</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor%}
+  </section>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="page-content">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="featured-games header-text">
+                <div class="heading-section text-center">
+                  <h4><em>Edit</em> VCD</h4>
+                </div>
+                {% for row in data %}
+                <div class="add-vcd-form">
+                    <form method="POST" action="/edit" enctype="multipart/form-data">
+                      <div class="form-group">
+                        <div class="heading-section mt-4">
+                            <h4>{{ form.title.label }}</h4>
+                        </div>
+                        <input type="text" class="form-control" name='title' value="{{row[1]}}">
+                      </div>
+                      <div class="form-group">
+                        <div class="heading-section mt-4">
+                            <h4>{{ form.stock.label }}</h4>
+                        </div>
+                        <input type="text" class="form-control" name='stock' value="{{row[5]}}">
+                      </div>
+                      <div class="form-group">
+                        <div class="heading-section mt-4">
+                            <h4>{{ form.price.label }}</h4>
+                        </div>
+                        <input type="text" class="form-control" name='price' value="{{row[3]}}">
+                      </div>
+                      <div class="form-group">
+                        <div class="heading-section mt-4">
+                            <h4>{{ form.description.label }}</h4>
+                        </div>
+                        <input type="text" class="form-control" name='description' value="{{row[6]}}">
+                      </div>
+                      <div class="form-group">
+                        <div class="heading-section mt-4">
+                            <h4>{{ form.image.label }}</h4>
+                        </div>
+                            <label for="image" class="form-check-label" style="color: white;">Old Image : </label><br>
+                            <img class="img-fluid" src="../static/files/{{row[2]}}" style="max-width: 200px; max-height: 200px;"><br><br>
+                            <label for="image" class="form-check-label" style="color: white;">New Image : </label>
+                            <input type="file" class="form-control-file" name="image" id="image">
+                      </div>
+                      <div class="form-group">
+                        <div class="heading-section mt-4">
+                          <h4>{{ form.genre.label }}</h4>
+                        </div>
+                        <select name="genre" id="genre" class="form-control">
+                            {% if row[4] == "COMEDY" %}
+                                <option value="COMEDY" selected>Comedy</option>
+                            {% else %}
+                                <option value="COMEDY">Comedy</option>
+                            {% endif %}
+                            {% if row[4] == "FANTASY" %}
+                                <option value="FANTASY" selected>Fantasy</option>
+                            {% else %}
+                                <option value="FANTASY">Fantasy</option>
+                            {% endif %}
+                            {% if row[4] == "HORROR" %}
+                                <option value="HORROR" selected>Horror</option>
+                            {% else %}
+                                <option value="HORROR">Horror</option>
+                            {% endif %}
+                        </select>
+                      </div>
+                      {% endfor %}
+                      <center>
+                          <button type="submit" class="button-container">Save</button>  
+                      </center>
+                    </form>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

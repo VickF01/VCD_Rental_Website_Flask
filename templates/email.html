@@ -1,0 +1,74 @@
+{% extends 'layout.html'%}
+{% block content %}
+  <!-- Message -->
+  <section class="content-header">
+    {% for message in get_flashed_messages()%}
+        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+          <strong>{{ message }}</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor%}
+  </section>
+  <!-- Message -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="page-content">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="featured-games header-text">
+                <div class="heading-section text-center">
+                  <h4><em>Email</em></h4>
+                </div>
+                <div class="add-vcd-form">
+                  <form action="/email" method="POST">
+                    <div class="form-group">
+                      <div class="heading-section mt-4">
+                        <h4>Email User</h4>
+                      </div>
+                      {% for row in emailuser %}
+                      <input type="email" class="form-control" name='email' value='{{row[0]}}'>
+                      {% endfor %}
+                    </div>
+                    <div class="form-group">
+                      <div class="heading-section mt-4">
+                        <h4>Password</h4>
+                      </div>
+                      <input type="password" class="form-control" name='password'>
+                    </div> 
+                    <div class="form-group">
+                      <div class="heading-section mt-4">
+                        <h4>Email Tujuan</h4>
+                      </div>
+                      <select name='emailkepada' class="form-control">
+                        <option value="all">All</option>
+                        {% for row in filtered_alluser %}
+                        <option value="{{row[0]}}">{{row[0]}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>                    
+                    <div class="form-group">
+                      <div class="heading-section mt-4">
+                        <h4>Subject</h4>
+                      </div>
+                      <input type="text" class="form-control" name='subject' placeholder="Judul Subject Email">
+                    </div>
+                    <div class="form-group">
+                      <div class="heading-section mt-4">
+                        <h4>Isi Email</h4>
+                      </div>
+                      <textarea class="form-control" name='isiemail'></textarea>
+                    </div>
+                    <div class="button-container">
+                      <button type="submit" class="btn btn-primary">Send</button>  
+                    </div>
+                  </form>             
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

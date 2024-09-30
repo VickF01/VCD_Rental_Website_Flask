@@ -1,0 +1,74 @@
+{% extends 'layout.html'%}
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        {% for row in data %}
+        <div class="page-content">
+          <!-- ***** Featured Start ***** -->
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="feature-banner header-text">
+                <div class="row">
+                  <div class="col-lg-12 text-center">
+                    <img id="image_banner" src="../static/files/{{row[2]}}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ***** Featured End ***** -->
+          <!-- ***** Details Start ***** -->
+          <div class="game-details">
+            <div class="row">
+              <div class="col-lg-12">
+                <h2>{{row[1]}}</h2>
+              </div>
+              <div class="col-lg-12">
+                <div class="content">
+                  <div class="row">
+                    <div class="col-lg-12 text-center">
+                      <div class="right-info">
+                        <ul>
+                          <li><h4>Genre</h4>{{row[4]|capitalize}}</li>
+                          <li><h4>Stock</h4>{{row[5]}}</li>
+                          <li><h4>Price</h4>{{row[3]|format_price}}</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="col-lg-12 ">
+                      <p>{{row[6]}}</p>
+                    </div>
+                    {% if outofstock %}
+                    <div class="col-lg-12 text-center">
+                      <div class="main-border-button">
+                        <a href="bookvcd/{{row[0]}}" class="disabled">Out of Stock</a>
+                      </div>
+                    </div>
+                    {% else %}
+                    {% if 'email' in session %}
+                    <div class="col-lg-12 text-center">
+                      <div class="main-border-button">
+                        <a href="bookvcd/{{row[0]}}">Book {{row[1]}} Now!</a>
+                      </div>
+                    </div>
+                    {% else %}
+                    <div class="col-lg-12 text-center">
+                      <div class="main-border-button">
+                        <a href="notlogged">Book {{row[1]}} Now!</a>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>              
+            </div>
+          </div>
+          <!-- ***** Details End ***** -->
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

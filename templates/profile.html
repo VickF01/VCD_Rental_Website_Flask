@@ -1,0 +1,194 @@
+{% extends 'layout.html'%}
+{% block content %}
+<style>
+  .heading-section {
+      position: relative;
+  }
+
+  #printButton {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin-top: 10px;
+      margin-right: 10px;
+      background-color: transparent;
+      border: 1px solid #ec6090;
+      color:#ec6090;
+      border-radius: 25px;
+      font-weight: 400;
+      text-transform: capitalize;
+      padding: 12px 30px;
+      transition: all .3s;
+  }
+
+  #printButton:hover {
+      border-color: #fff;
+      background-color: #fff;
+      color: #e75e8d;
+  }
+</style>
+<section class="content-header" style="margin-bottom: -40px;">
+  {% for message in get_flashed_messages()%}
+      <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+  {% endfor%}
+</section>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="page-content">
+          <!-- ***** Banner Start ***** -->
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="main-profile ">
+                {% if login %}
+                {% for row in user %}
+                <div class="row">
+                  <div class="col-lg-4">
+                    <img src="../static/assets/images/profile.jpg" alt="" style="border-radius: 23px;">
+                  </div>
+                  <div class="col-lg-4 align-self-center">
+                    <div class="main-info header-text">
+                      <h4>{{row[1]}} ({{row[3]}})</h4>
+                      <p>{{row[0]}}</p>
+                      <div class="main-border-button">
+                        <a href="/logout">Log Out</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+                {% elif admin %}
+                <div class="row">
+                  <div class="col-lg-4">
+                    <img src="../static/assets/images/profile.jpg" alt="" style="border-radius: 23px;">
+                  </div>
+                  <div class="col-lg-4 align-self-center">
+                    <div class="main-info header-text">
+                      <h4>Administrator</h4>
+                      <div class="main-border-button">
+                        <a href="/logout">Log Out</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% else %}
+                <div class="row">
+                  <div class="col-lg-4">
+                    <img src="../static/assets/images/profile.jpg" alt="" style="border-radius: 23px;">
+                  </div>
+                  <div class="col-lg-4 align-self-center">
+                    <div class="main-info header-text">
+                      <h4>Please Login To See Your Profile!</h4>
+                      <div class="main-border-button">
+                        <a href="/login">Login</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <!-- ***** Gaming Library Start ***** -->
+          {%if role == 'admin'%}
+          {% if admindata|length == 0 %}
+          <div class="gaming-library profile-library">
+            <div class="col-lg-12">
+              <div class="heading-section">
+                <h4><em>Rental</em> Transaction Report</h4>
+              </div>
+              <div class="no-data-container">
+                <p>No Transaction History</p>
+              </div>
+            </div>
+          </div>
+          {% else %}
+          <div class="gaming-library profile-library">
+            <div class="col-lg-12">
+                <div class="heading-section">
+                  <h4><em>Rental Transaction</em> Report</h4>
+                  <button id="printButton" onclick="redirectToPDF()">
+                    Print to PDF <i class="fa fa-print"></i>
+                  </button>
+                </div>
+                {% for row in admindata %}
+                <div class="item">
+                    <ul class="flex-container">
+                        <li><img src="../static/files/{{row[7]}}" alt="" class="templatemo-item"></li>
+                        <li><h4>Title</h4><span>{{row[4]}}</span></li>
+                        <li><h4>Price</h4><span>{{row[6]|format_price}}</span></li>
+                        <li><h4>Rent Date</h4><span>{{row[5]}}</span></li>
+                        <li><h4>Tenant</h4><span>{{row[2]}}</span></li>
+                        <li><h4>Status</h4><span>
+                        {% if row[8] == True %}
+                          Rental in Progress
+                        {% else %}
+                          Returned
+                        {% endif %}
+                        </span></li>
+                        <li class="download-button-li">
+                          {% if row[8] == True %}
+                            <div class="main-border-button"><a href="returnvcd/{{row[0]}}">Return</a></div>
+                          {% else %}
+                            <div class="main-border-button"><a href="deletetransaction/{{row[0]}}">Delete</a></div>
+                          {% endif %}
+                        </li>
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+          {% else %}
+          {% if data|length == 0 %}
+          <div class="gaming-library profile-library">
+            <div class="col-lg-12">
+              <div class="heading-section">
+                <h4><em>Active</em> Rental</h4>
+              </div>
+              <div class="no-data-container">
+                <p>No Rental Activity</p>
+              </div>
+            </div>
+          </div>
+          {% else %}
+          <div class="gaming-library profile-library">
+            <div class="col-lg-12">
+                <div class="heading-section">
+                    <h4><em>Rental</em> Library</h4>
+                </div>
+                {% for row in data %}
+                <div class="item">
+                    <ul class="flex-container">
+                        <li><img src="../static/files/{{row[7]}}" alt="" class="templatemo-item"></li>
+                        <li><h4>Title</h4><span>{{row[4]}}</span></li>
+                        <li><h4>Price</h4><span>{{row[6]}}</span></li>
+                        <li><h4>Rent Date</h4><span>{{row[5]}}</span></li>
+                        <li class="download-button-li">
+                            <div class="main-border-button"><a href="returnvcd/{{row[0]}}">Return</a></div>
+                        </li>
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+          {% endif %}
+          <!-- ***** Gaming Library End ***** -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function redirectToPDF() {
+        // Add your logic or perform any actions here
+
+        // Redirect to the desired URL with parameters
+        window.location.href = 'transpdf';
+    }
+</script>
+{% endblock %}
